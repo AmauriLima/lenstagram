@@ -52,7 +52,7 @@ class ProfileController {
     }
 
     let newPasswordEncrypted;
-    if (newPassword) {
+    if (newPassword || newPassword === '') {
       const newPasswordHasMinLength = newPassword.length >= 8;
 
       if (!newPasswordHasMinLength) {
