@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
 import { getCustomRepository } from 'typeorm';
+import bcrypt from 'bcryptjs';
+
 import { isEmailValid } from '../../utils/isEmailValid';
 import usersRepository from '../repositories/UsersRepository';
 
@@ -40,11 +42,15 @@ class UserController {
       return response.status(400).json({ error: 'User alread exists' });
     }
 
+    const encryptedPassword = await bcrypt.hash(password, 10);
+
     const user = UsersRepository.create({
-      name, email, password,
+      name, email, password: encryptedPassword,
     });
 
     await UsersRepository.save(user);
+
+    user.password = undefined;
 
     response.status(201).json(user);
   }
