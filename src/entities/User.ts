@@ -1,5 +1,5 @@
 import {
-  Column, CreateDateColumn, Entity, PrimaryColumn,
+  Column, CreateDateColumn, Entity, PrimaryColumn, UpdateDateColumn,
 } from 'typeorm';
 import { v4 as uuid } from 'uuid';
 
@@ -24,6 +24,6 @@ export class User {
   @CreateDateColumn()
   created_at: Date;
 
-  @CreateDateColumn()
+  @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP(6)', onUpdate: 'CURRENT_TIMESTAMP(6)' })
   updated_at: Date;
 }

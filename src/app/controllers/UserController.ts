@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
 import { getCustomRepository } from 'typeorm';
-import bcrypt from 'bcryptjs';
 
 import { isEmailValid } from '../../utils/isEmailValid';
 import usersRepository from '../repositories/UsersRepository';
 import { generateToken } from '../../utils/generateToken';
+import { comparePasswords, encryptPassword } from '../../utils/encript';
 
 interface IStoreRequestBody {
   name: string,
@@ -47,7 +47,7 @@ class UserController {
       return response.status(400).json({ error: 'User already exists' });
     }
 
-    const encryptedPassword = await bcrypt.hash(password, 10);
+    const encryptedPassword = await encryptPassword(password);
 
     const user = UsersRepository.create({
       name, email, password: encryptedPassword,
@@ -81,7 +81,7 @@ class UserController {
       return response.status(401).json({ error: 'Invalid e-mail/password' });
     }
 
-    const isValidPassword = await bcrypt.compare(password, user.password);
+    const isValidPassword = await comparePasswords(password, user.password);
 
     if (!isValidPassword) {
       return response.status(401).json({ error: 'Invalid e-mail/password' });
