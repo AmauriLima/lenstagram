@@ -44,7 +44,7 @@ class UserController {
     });
 
     if (userAlreadyExists) {
-      return response.status(400).json({ error: 'User already exists' });
+      return response.status(400).json({ error: 'This email is already in use' });
     }
 
     const encryptedPassword = await encryptPassword(password);

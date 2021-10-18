@@ -14,4 +14,4 @@ app.use(routes);
 app.use(errorHandler);
 
 // eslint-disable-next-line no-console
-app.listen(process.env.API_PORT, () => console.log('🔥 Server Started at http://localhost:3000'));
+app.listen(process.env.API_PORT, () => console.log(`🔥 Server Started at http://localhost:${process.env.API_PORT}`));

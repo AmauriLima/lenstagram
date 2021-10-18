@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { getCustomRepository } from 'typeorm';
 import { User } from '../../entities/User';
 import { comparePasswords, encryptPassword } from '../../utils/encript';
+import { isEmailValid } from '../../utils/isEmailValid';
 
 import usersRepository from '../repositories/UsersRepository';
 
@@ -59,6 +60,22 @@ class ProfileController {
       }
 
       newPasswordEncrypted = await encryptPassword(newPassword);
+    }
+
+    if (email) {
+      if (!isEmailValid(email)) {
+        return response.status(400).json({ error: 'Invalid email' });
+      }
+
+      const user = await UsersRepository.findOne({
+        where: {
+          email,
+        },
+      });
+
+      if (user && user.id !== user_id) {
+        return response.status(400).json({ error: 'This email is already in use' });
+      }
     }
 
     const updatedUserData: User = {
