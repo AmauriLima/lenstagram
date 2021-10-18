@@ -5,8 +5,12 @@ import bcrypt from 'bcryptjs';
 import { isEmailValid } from '../../utils/isEmailValid';
 import usersRepository from '../repositories/UsersRepository';
 
-interface IRequestBody {
+interface IStoreRequestBody {
   name: string,
+  email: string,
+  password: string,
+}
+interface ILoginRequestBody {
   email: string,
   password: string,
 }
@@ -14,7 +18,7 @@ interface IRequestBody {
 class UserController {
   async store(request: Request, response: Response) {
     const UsersRepository = getCustomRepository(usersRepository);
-    const { name, email, password }: IRequestBody = request.body;
+    const { name, email, password }: IStoreRequestBody = request.body;
 
     if (!name || !email || !password) {
       return response.status(400).json({ error: 'Missing required arguments' });
@@ -39,7 +43,7 @@ class UserController {
     });
 
     if (userAlreadyExists) {
-      return response.status(400).json({ error: 'User alread exists' });
+      return response.status(400).json({ error: 'User already exists' });
     }
 
     const encryptedPassword = await bcrypt.hash(password, 10);
@@ -53,6 +57,35 @@ class UserController {
     user.password = undefined;
 
     response.status(201).json(user);
+  }
+
+  async login(request: Request, response: Response) {
+    const UsersRepository = getCustomRepository(usersRepository);
+    const { email, password }: ILoginRequestBody = request.body;
+
+    if (!email || !password) {
+      return response.status(400).json({ error: 'Missing e-mail/password or both' });
+    }
+
+    const user = await UsersRepository.findOne({
+      where: {
+        email,
+      },
+    });
+
+    if (!user) {
+      return response.status(401).json({ error: 'Invalid e-mail/password' });
+    }
+
+    const isValidPassword = await bcrypt.compare(password, user.password);
+
+    if (!isValidPassword) {
+      return response.status(401).json({ error: 'Invalid e-mail/password' });
+    }
+
+    user.password = undefined;
+
+    response.status(200).json(user);
   }
 }
 
