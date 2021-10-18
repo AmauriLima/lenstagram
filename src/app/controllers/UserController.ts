@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { getCustomRepository } from 'typeorm';
-import { isEmailValid } from '../../../utils/isEmailValid';
+import { isEmailValid } from '../../utils/isEmailValid';
 import usersRepository from '../repositories/UsersRepository';
 
 interface IRequestBody {
