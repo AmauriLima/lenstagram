@@ -4,6 +4,7 @@ import bcrypt from 'bcryptjs';
 
 import { isEmailValid } from '../../utils/isEmailValid';
 import usersRepository from '../repositories/UsersRepository';
+import { generateToken } from '../../utils/generateToken';
 
 interface IStoreRequestBody {
   name: string,
@@ -56,7 +57,10 @@ class UserController {
 
     user.password = undefined;
 
-    response.status(201).json(user);
+    response.status(201).json({
+      user,
+      token: generateToken(user),
+    });
   }
 
   async login(request: Request, response: Response) {
@@ -85,7 +89,10 @@ class UserController {
 
     user.password = undefined;
 
-    response.status(200).json(user);
+    response.status(200).json({
+      user,
+      token: generateToken(user),
+    });
   }
 }
 
