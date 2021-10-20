@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { verifyToken } from '../middlewares/ensureAuthenticated';
-import { profileRoutes } from './ProfileRoutes';
+import { profileRoutes } from './profileRoutes';
 import { userRoutes } from './userRoutes';
 
 const routes = Router();
