@@ -1,6 +1,13 @@
 import {
-  Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn,
+  BeforeInsert,
+  BeforeUpdate,
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
+import { encryptPassword } from '../../utils/encrypt';
 
 @Entity('users')
 export class User {
@@ -21,4 +28,10 @@ export class User {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  hashPassword() {
+    this.password = encryptPassword(this.password);
+  }
 }

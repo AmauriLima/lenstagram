@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { getCustomRepository } from 'typeorm';
-import { User } from '../../app/models/User';
-import { comparePasswords, encryptPassword } from '../../utils/encrypt';
+import { comparePasswords } from '../../utils/encrypt';
 import { isEmailValid } from '../../utils/isEmailValid';
 
 import usersRepository from '../repositories/UsersRepository';
@@ -22,7 +21,7 @@ class ProfileController {
       return response.status(404).json({ error: 'User not found' });
     }
 
-    user.password = undefined;
+    delete user.password;
 
     response.status(200).json(user);
   }
@@ -51,15 +50,12 @@ class ProfileController {
       return response.status(401).json({ error: 'Invalid password' });
     }
 
-    let newPasswordEncrypted;
     if (newPassword || newPassword === '') {
       const newPasswordHasMinLength = newPassword.length >= 8;
 
       if (!newPasswordHasMinLength) {
         return response.status(400).json({ error: 'Password must be at least 8 characters' });
       }
-
-      newPasswordEncrypted = await encryptPassword(newPassword);
     }
 
     if (email) {
@@ -78,18 +74,18 @@ class ProfileController {
       }
     }
 
-    const updatedUserData: User = {
+    const updatedUserData = {
       ...currentUserData,
       name,
       email,
-      password: newPasswordEncrypted,
+      password,
     };
 
     const updatedUser = UsersRepository.create(updatedUserData);
 
     await UsersRepository.save(updatedUser);
 
-    updatedUser.password = undefined;
+    delete updatedUser.password;
 
     response.status(200).json(updatedUser);
   }

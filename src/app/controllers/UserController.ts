@@ -4,7 +4,7 @@ import { getCustomRepository } from 'typeorm';
 import { isEmailValid } from '../../utils/isEmailValid';
 import usersRepository from '../repositories/UsersRepository';
 import { generateToken } from '../../utils/generateToken';
-import { comparePasswords, encryptPassword } from '../../utils/encrypt';
+import { comparePasswords } from '../../utils/encrypt';
 
 interface IStoreRequestBody {
   name: string,
@@ -44,18 +44,16 @@ class UserController {
     });
 
     if (userAlreadyExists) {
-      return response.status(400).json({ error: 'This email is already in use' });
+      return response.status(409).json({ error: 'This email is already in use' });
     }
 
-    const encryptedPassword = await encryptPassword(password);
-
     const user = UsersRepository.create({
-      name, email, password: encryptedPassword,
+      name, email, password,
     });
 
     await UsersRepository.save(user);
 
-    user.password = undefined;
+    delete user.password;
 
     response.status(201).json({
       user,
@@ -87,7 +85,7 @@ class UserController {
       return response.status(401).json({ error: 'Invalid e-mail/password' });
     }
 
-    user.password = undefined;
+    delete user.password;
 
     response.status(200).json({
       user,
