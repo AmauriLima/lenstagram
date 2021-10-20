@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { getCustomRepository } from 'typeorm';
 import { User } from '../../app/models/User';
-import { comparePasswords, encryptPassword } from '../../utils/encript';
+import { comparePasswords, encryptPassword } from '../../utils/encrypt';
 import { isEmailValid } from '../../utils/isEmailValid';
 
 import usersRepository from '../repositories/UsersRepository';
