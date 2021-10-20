@@ -1,16 +1,11 @@
 import {
-  Column, CreateDateColumn, Entity, PrimaryColumn, UpdateDateColumn,
+  Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn,
 } from 'typeorm';
-import { v4 as uuid } from 'uuid';
 
 @Entity('users')
 export class User {
-  constructor() {
-    if (!this.id) this.id = uuid();
-  }
-
-  @PrimaryColumn()
-  readonly id: string;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column()
   name: string;
@@ -24,6 +19,6 @@ export class User {
   @CreateDateColumn()
   created_at: Date;
 
-  @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP(6)', onUpdate: 'CURRENT_TIMESTAMP(6)' })
+  @UpdateDateColumn()
   updated_at: Date;
 }

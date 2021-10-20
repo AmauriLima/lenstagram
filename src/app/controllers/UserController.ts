@@ -4,7 +4,7 @@ import { getCustomRepository } from 'typeorm';
 import { isEmailValid } from '../../utils/isEmailValid';
 import usersRepository from '../repositories/UsersRepository';
 import { generateToken } from '../../utils/generateToken';
-import { comparePasswords, encryptPassword } from '../../utils/encript';
+import { comparePasswords, encryptPassword } from '../../utils/encrypt';
 
 interface IStoreRequestBody {
   name: string,
