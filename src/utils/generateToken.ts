@@ -6,8 +6,8 @@ interface IGenerateTokenParams {
 }
 
 export function generateToken({ email, id }: IGenerateTokenParams) {
-  return jwt.sign({ email }, process.env.SECRET_KEY, {
+  return jwt.sign({ email }, process.env.JWT_SECRET_KEY, {
     subject: id,
-    expiresIn: 86400,
+    expiresIn: process.env.JWT_EXPIRATION,
   });
 }

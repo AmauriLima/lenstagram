@@ -18,7 +18,7 @@ export function verifyToken(request: Request, response: Response, next: NextFunc
     return response.status(401).json({ error: 'Token malformatted' });
   }
 
-  jwt.verify(token, process.env.SECRET_KEY, (error: Error, decoded: IDecodedUser) => {
+  jwt.verify(token, process.env.JWT_SECRET_KEY, (error: Error, decoded: IDecodedUser) => {
     if (error) {
       response.status(401).json({ error: 'Invalid token' });
     }
