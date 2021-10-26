@@ -31,7 +31,8 @@ class PostController {
     const PostsRepository = getCustomRepository(postsRepository);
 
     const { user_id } = request;
-    const { post_id, description } = request.body;
+    const { post_id } = request.params;
+    const { description } = request.body;
     const image = request.file;
 
     const post = await PostsRepository.findByIdWithSQL(post_id);
@@ -62,7 +63,7 @@ class PostController {
   async delete(request: Request, response: Response) {
     const PostsRepository = getCustomRepository(postsRepository);
 
-    const { post_id } = request.body;
+    const { post_id } = request.params;
     const { user_id } = request;
 
     const post = await PostsRepository.findOne({
