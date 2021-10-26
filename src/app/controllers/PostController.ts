@@ -58,6 +58,35 @@ class PostController {
 
     response.status(200).json(updatedPost);
   }
+
+  async delete(request: Request, response: Response) {
+    const PostsRepository = getCustomRepository(postsRepository);
+
+    const { post_id } = request.body;
+    const { user_id } = request;
+
+    const post = await PostsRepository.findOne({
+      where: {
+        id: post_id,
+      },
+    });
+
+    if (!post) {
+      return response.status(404).json({ error: 'Post not found!' });
+    }
+
+    if (post.user_id !== user_id) {
+      return response.status(401).json({ err: 'You can only delete posts created by yourself' });
+    }
+
+    await deleteFile(post.url_img);
+
+    await PostsRepository.delete({
+      id: post_id,
+    });
+
+    response.sendStatus(204);
+  }
 }
 
 export default new PostController();

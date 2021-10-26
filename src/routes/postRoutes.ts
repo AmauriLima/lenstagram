@@ -10,5 +10,6 @@ const postRoutes = Router();
 
 postRoutes.post('/', verifyToken, multer(multerConfig).single('image'), PostController.store);
 postRoutes.put('/edit', verifyToken, multer(multerConfig).single('image'), PostController.update);
+postRoutes.delete('/delete', verifyToken, PostController.delete);
 
 export { postRoutes };
