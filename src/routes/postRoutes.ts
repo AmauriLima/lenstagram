@@ -9,5 +9,6 @@ import { verifyToken } from '../middlewares/ensureAuthenticated';
 const postRoutes = Router();
 
 postRoutes.post('/', verifyToken, multer(multerConfig).single('image'), PostController.store);
+postRoutes.put('/edit', verifyToken, multer(multerConfig).single('image'), PostController.update);
 
 export { postRoutes };
