@@ -15,6 +15,7 @@ export class CreatePosts1635210819736 implements MigrationInterface {
         {
           name: 'description',
           type: 'varchar',
+          isNullable: true,
         },
         {
           name: 'user_id',
@@ -23,7 +24,7 @@ export class CreatePosts1635210819736 implements MigrationInterface {
         },
         {
           name: 'url_img',
-          type: 'bytea',
+          type: 'varchar',
           isNullable: false,
         },
         {
