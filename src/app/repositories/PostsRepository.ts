@@ -1,8 +1,15 @@
 import { EntityRepository, Repository } from 'typeorm';
+import { delay } from '../../utils/delay';
 import { Post } from '../models/Post';
 
 @EntityRepository(Post)
 class PostsRepository extends Repository<Post> {
+  async findAllByUserIdWithSQL(id: string): Promise<Post> {
+    await delay(2000);
+    const posts = await this.query('SELECT * FROM posts WHERE user_id = $1 ORDER BY created_at DESC', [id]);
+    return posts;
+  }
+
   async findByIdWithSQL(id: string): Promise<Post> {
     const [post] = await this.query('SELECT * FROM posts WHERE id = $1', [id]);
     return post;

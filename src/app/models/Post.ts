@@ -16,7 +16,7 @@ export class Post {
 
   @JoinColumn({ name: 'user_id' })
   @OneToMany(() => User, (user) => user.id)
-  userId: User;
+  user: User;
 
   @Column()
   url_img: string

@@ -3,6 +3,7 @@ import { getCustomRepository } from 'typeorm';
 
 import { deleteFile } from '../../utils/file';
 import postsRepository from '../repositories/PostsRepository';
+import usersRepository from '../repositories/UsersRepository';
 
 class PostController {
   async store(request: Request, response: Response) {
@@ -87,6 +88,38 @@ class PostController {
     });
 
     response.sendStatus(204);
+  }
+
+  async indexByUser(request: Request, response: Response) {
+    const PostsRepository = getCustomRepository(postsRepository);
+    const UsersRepository = getCustomRepository(usersRepository);
+
+    const { user_id } = request.params;
+
+    const user = await UsersRepository.findByIdWithSQL(user_id);
+
+    delete user.password;
+
+    if (!user) {
+      return response.status(404).json({ error: 'User not found!' });
+    }
+
+    const posts = await PostsRepository.findAllByUserIdWithSQL(user_id);
+
+    response.status(200).json({
+      user,
+      posts,
+    });
+  }
+
+  async indexMyPosts(request: Request, response: Response) {
+    const PostsRepository = getCustomRepository(postsRepository);
+
+    const { user_id } = request;
+
+    const posts = await PostsRepository.findAllByUserIdWithSQL(user_id);
+
+    response.status(200).json(posts);
   }
 }
 
