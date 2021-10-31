@@ -1,0 +1,22 @@
+version: "3.7"
+
+services:
+  database_lenstagram:
+    image: postgres
+    container_name: db_lenstagram
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - pgdata:/data/postgres
+    network_mode: host
+  app:
+    build: .
+    container_name: lenstagram
+    volumes:
+      - .:/usr/app
+    network_mode: host
+
+volumes:
+  pgdata:
+    driver: local

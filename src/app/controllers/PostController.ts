@@ -39,10 +39,12 @@ class PostController {
     const post = await PostsRepository.findByIdWithSQL(post_id);
 
     if (!post) {
+      await deleteFile(image.path);
       return response.status(404).json({ error: 'This post does not exist' });
     }
 
     if (post.user_id !== user_id) {
+      await deleteFile(image.path);
       return response.status(401).json({ error: 'You can only edit posts created by yourself' });
     }
 
