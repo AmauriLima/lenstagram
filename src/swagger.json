@@ -7,5 +7,86 @@
     "contact": {
       "email": "amauri.plimaj@gmail.com"
     }
+  },
+  "paths": {
+    "/users/register": {
+      "post": {
+        "tags": ["User Auth"],
+        "summary": "Create a user",
+        "description": "Create and register a new user account",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "name": "user name sample",
+                  "email": "user@mail.com",
+                  "password": "passwordsample"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User created"
+          },
+          "400": {
+            "description": "Missing required properties"
+          },
+          "409": {
+            "description": "User already exists"
+          }
+        }
+      }
+    },
+    "/users/login": {
+      "post": {
+        "tags": ["User Auth"],
+        "summary": "Make SignIn",
+        "description": "SignIn at a user account",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "email": "user@mail.com",
+                  "password": "passwordsample"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login with success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    }
   }
 }
