@@ -1,0 +1,11 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Lenstagram Documentation",
+    "description": "Rest API developed with Node, Express, TypeScript and TypeORM",
+    "version": "1.0.0",
+    "contact": {
+      "email": "amauri.plimaj@gmail.com"
+    }
+  }
+}
